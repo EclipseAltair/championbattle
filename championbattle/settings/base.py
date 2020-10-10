@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "backend.api",
 ]
 
 MIDDLEWARE = [
@@ -88,4 +90,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+MEDIA_ROOT = str(BASE_DIR / "static" / "media")
+MEDIA_URL = "/media/"
+
+STATIC_ROOT = str(BASE_DIR / "static" / "static")
 STATIC_URL = "/static/"
+
+STATICFILES_DIRS = (str(BASE_DIR / "static" / "assets"),)
