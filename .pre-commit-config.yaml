@@ -1,0 +1,60 @@
+repos:
+-   repo: https://github.com/asottile/seed-isort-config
+    rev: v2.2.0
+    hooks:
+    - id: seed-isort-config
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: check-ast
+      - id: check-builtin-literals
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+        exclude_types: [svg, css, html, less, javascript, json, coffee, map, markdown]
+      # Унификация encodging в проекте
+      - id: fix-encoding-pragma
+        args: [--pragma=# coding=utf-8]
+
+
+-   repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: venv/bin/black
+        language: python
+        types: [python]
+        args: []
+        require_serial: false
+        additional_dependencies: []
+      # isort из репки pre-commit неправильно работает
+      - id: isort
+        name: isort
+        entry: venv/bin/isort
+        language: python
+        types: [python]
+        args: []
+        require_serial: false
+        additional_dependencies: []
+      # flake8 из репки pre-commit не подтягивает модули
+      - id: flake8
+        name: flake8
+        entry: venv/bin/flake8
+        language: python
+        types: [python]
+        args:
+          - backend
+        require_serial: false
+        additional_dependencies: []
+        # Эти две настройки позволяют запускать flake8 только для указанных в args модулей
+        # Будем потихоньку добавлять сюда модули. Как добавим все сделаем запуск flake8 на файлах в коммите
+        pass_filenames: false
+        always_run: true
+#      - id: pre-commit-checks
+#        name: pre-commit-checks
+#        entry: venv/bin/python
+#        args: [manage.py, pre_commit_checks, --fail-level=WARNING]
+#        language: script
+#        pass_filenames: false
+#        types: [python]
+#        always_run: true
