@@ -1,5 +1,6 @@
 # coding=utf-8
 # stdlib
+import datetime
 from pathlib import Path
 
 # django
@@ -30,7 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework.authtoken",
+    "rest_framework_jwt",
     "backend.api",
 ]
 
@@ -65,6 +66,18 @@ TEMPLATES = [
 WSGI_APPLICATION = "championbattle.wsgi.application"
 
 DATABASES = {"default": env.db("DEFAULT_DATABASE_URL")}
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+    ),
+}
+
+JWT_AUTH = {
+    "JWT_VERIFY": True,
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_EXPIRATION_DELTA": datetime.timedelta(seconds=60 * 10),
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -10,6 +10,7 @@ distlib==0.3.1
 Django==3.1.2
 django-environ==0.4.5
 djangorestframework==3.12.1
+djangorestframework-jwt==1.11.0
 eradicate==1.0
 filelock==3.0.12
 flake8==3.8.4
@@ -41,6 +42,7 @@ psycopg2==2.8.6
 pycodestyle==2.6.0
 pydocstyle==5.1.1
 pyflakes==2.2.0
+PyJWT==1.7.1
 pytz==2020.1
 PyYAML==5.3.1
 regex==2020.9.27

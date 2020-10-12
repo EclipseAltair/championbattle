@@ -1,24 +1,36 @@
 # coding=utf-8
 # django
 from rest_framework import status
-from rest_framework.authtoken.models import Token
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 # app
-from ..serializers.auth import SignUpSerializer
+from ..serializers.auth import UserSerializer
 
 
-class SignUpView(APIView):
-    """ Регистрация нового пользователя """
+class UserCreateView(CreateAPIView):
+    """ Создание пользователя """
 
-    def post(self, request):
-        serializer = SignUpSerializer(data=request.data)
+    serializer_class = UserSerializer
+
+
+class UserRetrieveUpdateView(RetrieveUpdateAPIView):
+    """ Получение, обновление данных пользователя """
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, *args, **kwargs):
+        serializer_data = request.data.get("user", {})
+
+        serializer = UserSerializer(request.user, data=serializer_data, partial=True)
         if serializer.is_valid():
             user = serializer.save()
             if user:
-                token = Token.objects.create(user=user)
-                json = serializer.data
-                json["token"] = token.key
-                return Response(json, status=status.HTTP_201_CREATED)
+                return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

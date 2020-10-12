@@ -5,8 +5,8 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 
-class SignUpSerializer(serializers.ModelSerializer):
-    """ Сериалайзер регистрации клиента """
+class UserSerializer(serializers.ModelSerializer):
+    """ Сериалайзер пользователя """
 
     username = serializers.CharField(
         max_length=20, validators=[UniqueValidator(queryset=User.objects.all())]
@@ -26,3 +26,4 @@ class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "username", "email", "password")
+        extra_kwargs = {"password": {"write_only": True}}

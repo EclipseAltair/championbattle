@@ -1,0 +1,32 @@
+---
+openapi: 3.0.0
+info:
+  title: CHAMPIONBATTLE API
+  description: API сайта
+  version: v1
+servers:
+  - url: http://127.0.0.1:8000/api
+    description: Local
+  - url: https://championbattle.ru/api
+    description: Production
+tags:
+  - name: auth
+    description: Вход, регистрация, данные о пользователе
+paths:
+  /auth/create/:
+    post:
+      tags:
+        - auth
+      summary: Создание пользователя
+      responses:
+        200:
+          description: Список городов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID пользователя
+                    example: 1488
