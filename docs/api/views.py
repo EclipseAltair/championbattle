@@ -1,11 +1,18 @@
 # coding=utf-8
+# stdlib
+import json
+
+# thirdparty
+import yaml
+
 # django
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.shortcuts import render
 
 
-class SwaggerAPIView(APIView):
+def swagger_api_view(request):
     """ Документация API """
 
-    def get(self, request, *args, **kwargs):
-        return Response("qwe")
+    with open("backend/api/api.yml") as f:
+        data = yaml.load(f.read(), Loader=yaml.Loader)
+        data = json.dumps(data)
+    return render(request, "docs/api/swagger.html", {"data": data})

@@ -12,5 +12,5 @@ app_name = "api"
 urlpatterns = [
     path("auth/create/", UserCreateView.as_view()),
     path("auth/obtain_token/", obtain_jwt_token),
-    path("auth/update/", UserRetrieveUpdateView.as_view()),
+    path("auth/get_or_update/", UserRetrieveUpdateView.as_view()),
 ]

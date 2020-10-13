@@ -18,15 +18,159 @@ paths:
       tags:
         - auth
       summary: Создание пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  description: Ник пользователя
+                  example: test12345
+                  required: true
+                email:
+                  type: string
+                  description: email пользователя
+                  example: test12345@ya.ru
+                  required: true
+                password:
+                  type: string
+                  description: Пароль
+                  example: test12345
+                  required: true
       responses:
         200:
-          description: Список городов
+          description: Успешное создание пользователя
           content:
             application/json:
               schema:
-                type: object
+                $ref: "#/components/schemas/UserAuthSchema"
+        400:
+          description: Ошибка создания пользователя
+          content:
+            application/json:
+              schema:
                 properties:
-                  id:
-                    type: integer
-                    description: ID пользователя
-                    example: 1488
+                  username:
+                    type: array
+                    example: [ Это поле должно быть уникально. ]
+                  email:
+                    type: array
+                    example: [ Это поле должно быть уникально. ]
+                  password:
+                    type: array
+                    example: [ Это поле обязательно. ]
+  /auth/obtain_token/:
+    post:
+      tags:
+        - auth
+      summary: Получение токена авторизации
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  description: Ник пользователя
+                  example: test12345
+                  required: true
+                password:
+                  type: string
+                  description: Пароль
+                  example: test12345
+                  required: true
+      responses:
+        200:
+          description: Успешное получение токена
+          content:
+            application/json:
+              schema:
+                properties:
+                  token:
+                    type: string
+                    description: Токен
+                    example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo4LCJ1c2VybmFtZSI6InRlc3QxMjM0NSI
+        400:
+          description: Ошибка при получении токена
+          content:
+            application/json:
+              schema:
+                properties:
+                  non_field_errors:
+                    type: array
+                    example: [ Невозможно войти с предоставленными учетными данными. ]
+  /auth/get_or_update/:
+    get:
+      tags:
+        - auth
+      summary: Получение данных пользователя
+      responses:
+        200:
+          description: Успешное получение данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAuthSchema"
+        401:
+          description: Ошибка при получении токена или токен истек
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: Signature has expired.
+    put:
+      tags:
+        - auth
+      summary: Обновление данных пользователя
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                      description: Ник пользователя
+                      example: test1234567
+      responses:
+        200:
+          description: Успешное обновление данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAuthSchema"
+        400:
+          description: Ошибка при получении токена или токен истек
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    type: string
+                    example: Invalid signature.
+components:
+  schemas:
+    UserAuthSchema:
+      properties:
+        id:
+          type: integer
+          description: ID пользователя
+          example: 1488
+        username:
+          type: string
+          description: Ник пользователя
+          example: test12345
+        email:
+          type: string
+          description: email пользователя
+          example: test12345@ya.ru
+        password:
+          type: string
+          description: Пароль
+          example: pbkdf2_sha256$216000$kebOO6IYHYWf$yLR0aqHdygQqrgUvsljnv9s+bMXXnRhBD0PLw4gE4Z8=
